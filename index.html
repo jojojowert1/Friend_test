@@ -5,11 +5,11 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>тип дружбы</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;800&family=DM+Mono:wght@400&display=swap" rel="stylesheet">
 <style>
 :root {
-  --font-sans: 'Inter', ui-sans-serif, system-ui, -apple-system, sans-serif;
-  --font-mono: 'JetBrains Mono', ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --font-sans: 'Outfit', ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --font-mono: 'DM Mono', ui-sans-serif, system-ui, -apple-system, sans-serif;
   --radius-sm: 6px;
   --radius-md: 10px;
   --radius-lg: 20px;
@@ -51,32 +51,85 @@
 }
 
 body {
-  background: var(--bg);
+  background: linear-gradient(150deg, var(--bg) 0%, var(--accent-border) 40%, var(--bg) 70%, var(--accent-bg) 100%);
+  background-size: 250% 250%;
+  animation: bgBreathe 10s ease infinite;
   color: var(--text);
   font-family: var(--font-sans);
   font-weight: 400;
   font-size: 16px;
   line-height: 1.45;
   letter-spacing: -0.01em;
-  min-height: 100vh;
+  min-height: 100svh;
   display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: center;
   transition: background 0.3s, color 0.3s;
   -webkit-font-smoothing: antialiased;
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  width: 200vw;
+  height: 200vh;
+  top: -50%;
+  left: -50%;
+  background: radial-gradient(ellipse at 25% 45%, var(--accent) 0%, transparent 50%);
+  opacity: 0.15;
+  animation: blobFloat 18s ease-in-out infinite;
+  pointer-events: none;
+  z-index: 0;
+}
+
+body::after {
+  content: '';
+  position: fixed;
+  width: 200vw;
+  height: 200vh;
+  top: -50%;
+  left: -50%;
+  background: radial-gradient(ellipse at 70% 60%, var(--accent-border) 0%, transparent 50%);
+  opacity: 0.2;
+  animation: blobFloat2 22s ease-in-out infinite alternate;
+  pointer-events: none;
+  z-index: 0;
+}
+
+@keyframes bgBreathe {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+@keyframes blobFloat {
+  0% { transform: translate(-5%, 0) scale(1); }
+  25% { transform: translate(5%, -5%) scale(1.1); }
+  50% { transform: translate(-3%, 5%) scale(0.9); }
+  75% { transform: translate(4%, -3%) scale(1.05); }
+  100% { transform: translate(-2%, 2%) scale(0.95); }
+}
+
+@keyframes blobFloat2 {
+  0% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(-6%, 4%) scale(1.15); }
+  100% { transform: translate(4%, -6%) scale(0.9); }
 }
 
 .container {
   width: 100%;
   max-width: 600px;
-  padding: 40px 24px;
+  padding: 24px 28px;
+  margin: auto;
+  position: relative;
+  z-index: 1;
 }
 
 .header {
   display: flex;
   align-items: center;
   gap: 10px;
-  margin-bottom: 44px;
+  margin-bottom: 16px;
 }
 
 .header-logo {
@@ -125,7 +178,7 @@ body {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  margin-bottom: 24px;
+  margin-bottom: 12px;
   font-size: 12px;
   color: var(--text-secondary);
   transition: color 0.3s;
@@ -150,7 +203,7 @@ body {
   display: flex;
   align-items: center;
   gap: 12px;
-  margin-bottom: 40px;
+  margin-bottom: 16px;
 }
 
 .progress-track {
@@ -186,15 +239,20 @@ body {
 
 .step {
   display: none;
-  animation: fadeIn 0.4s ease;
 }
 
 .step.active {
   display: block;
+  animation: fadeIn 0.35s ease;
 }
 
 @keyframes fadeIn {
   from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeInDown {
+  from { opacity: 0; transform: translateY(-10px); }
   to { opacity: 1; transform: translateY(0); }
 }
 
@@ -207,19 +265,19 @@ body {
 }
 
 .step-title {
-  font-weight: 400;
+  font-weight: 500;
   font-size: 22px;
-  line-height: 1.25;
+  line-height: 1.3;
   letter-spacing: -0.01em;
   color: var(--text);
-  margin-bottom: 6px;
+  margin-bottom: 8px;
   transition: color 0.3s;
 }
 
 .step-desc {
   font-size: 14px;
   color: var(--text-secondary);
-  margin-bottom: 28px;
+  margin-bottom: 24px;
   line-height: 1.5;
   transition: color 0.3s;
 }
@@ -234,7 +292,10 @@ body {
 }
 
 .option-card {
-  padding: 14px 18px;
+  padding: 14px 20px;
+  min-height: 56px;
+  display: flex;
+  align-items: center;
   background: var(--surface);
   border: 1.5px solid var(--border);
   border-radius: var(--radius-md);
@@ -250,6 +311,19 @@ body {
 .option-card.selected {
   border-color: var(--accent);
   background: var(--accent-bg);
+}
+
+.option-card--error {
+  border-color: var(--accent);
+  animation: shake 0.4s ease;
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  20% { transform: translateX(-5px); }
+  40% { transform: translateX(5px); }
+  60% { transform: translateX(-3px); }
+  80% { transform: translateX(3px); }
 }
 
 .option-label {
@@ -314,7 +388,7 @@ body {
 
 .result-card {
   text-align: center;
-  padding: 40px 24px;
+  padding: 40px 28px;
   background: var(--surface);
   border: 1.5px solid var(--accent-border);
   border-radius: var(--radius-lg);
@@ -345,7 +419,7 @@ body {
 }
 
 .result-item {
-  padding: 18px 20px;
+  padding: 14px 20px;
   background: var(--surface);
   border: 1.5px solid var(--border);
   border-radius: var(--radius-md);
@@ -391,7 +465,7 @@ body {
     <span class="header-logo">/ friend</span>
     <span class="header-divider"></span>
     <span class="header-label" id="stepLabel">тест</span>
-    <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()" title="Переключить тему">
+    <button type="button" class="theme-toggle" id="themeToggle" onclick="toggleTheme()" title="Переключить тему">
       <svg id="themeIcon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
         <circle cx="12" cy="12" r="5"/>
         <line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/>
@@ -422,19 +496,22 @@ body {
       <div class="step-title">Ты чувствуешь, что твой друг изменился. Что будешь делать?</div>
       <div class="form-group">
         <div class="options-grid" id="q1">
-          <div class="option-card" data-value="pleasure" onclick="selectSingle(this, 'q1')">
-            <div class="option-label">Посмотрю ещё, но если стало скучно — будем видеться реже</div>
-          </div>
-          <div class="option-card" data-value="utility" onclick="selectSingle(this, 'q1')">
-            <div class="option-label">Главное, чтобы это не повлияло на наши общие дела</div>
-          </div>
-          <div class="option-card" data-value="virtue" onclick="selectSingle(this, 'q1')">
-            <div class="option-label">Узнаю, чем он теперь интересуется и почему изменился</div>
-          </div>
+          <label class="option-card">
+            <input type="radio" name="q1" value="pleasure" hidden>
+            <span class="option-label">Посмотрю ещё, но если стало скучно — будем видеться реже</span>
+          </label>
+          <label class="option-card">
+            <input type="radio" name="q1" value="utility" hidden>
+            <span class="option-label">Главное, чтобы это не повлияло на наши общие дела</span>
+          </label>
+          <label class="option-card">
+            <input type="radio" name="q1" value="virtue" hidden>
+            <span class="option-label">Узнаю, чем он теперь интересуется и почему изменился</span>
+          </label>
         </div>
       </div>
       <div class="btn-row">
-        <button class="btn btn-primary" onclick="nextStep()">Далее</button>
+        <button type="button" class="btn btn-primary" onclick="nextStep()">Далее</button>
       </div>
     </div>
 
@@ -444,20 +521,23 @@ body {
       <div class="step-title">Твой друг сказал, что ему тяжело. Что предложишь?</div>
       <div class="form-group">
         <div class="options-grid" id="q2">
-          <div class="option-card" data-value="utility" onclick="selectSingle(this, 'q2')">
-            <div class="option-label">Давай посмотрим, как я могу тебе помочь</div>
-          </div>
-          <div class="option-card" data-value="pleasure" onclick="selectSingle(this, 'q2')">
-            <div class="option-label">Тебе надо развлечься. Давай сходим куда-нибудь?</div>
-          </div>
-          <div class="option-card" data-value="virtue" onclick="selectSingle(this, 'q2')">
-            <div class="option-label">Расскажи, что случилось. Вместе придумаем, как это исправить</div>
-          </div>
+          <label class="option-card">
+            <input type="radio" name="q2" value="utility" hidden>
+            <span class="option-label">Давай посмотрим, как я могу тебе помочь</span>
+          </label>
+          <label class="option-card">
+            <input type="radio" name="q2" value="pleasure" hidden>
+            <span class="option-label">Тебе надо развлечься. Давай сходим куда-нибудь?</span>
+          </label>
+          <label class="option-card">
+            <input type="radio" name="q2" value="virtue" hidden>
+            <span class="option-label">Расскажи, что случилось. Вместе придумаем, как это исправить</span>
+          </label>
         </div>
       </div>
       <div class="btn-row">
-        <button class="btn btn-outline" onclick="prevStep()">Назад</button>
-        <button class="btn btn-primary" onclick="nextStep()">Далее</button>
+        <button type="button" class="btn btn-outline" onclick="prevStep()">Назад</button>
+        <button type="button" class="btn btn-primary" onclick="nextStep()">Далее</button>
       </div>
     </div>
 
@@ -467,20 +547,23 @@ body {
       <div class="step-title">Друг попросил помочь с переездом. Твоя реакция?</div>
       <div class="form-group">
         <div class="options-grid" id="q3">
-          <div class="option-card" data-value="pleasure" onclick="selectSingle(this, 'q3')">
-            <div class="option-label">Если будет весело — почему бы и нет?</div>
-          </div>
-          <div class="option-card" data-value="utility" onclick="selectSingle(this, 'q3')">
-            <div class="option-label">Помогу, но потом попрошу его присмотреть за котом</div>
-          </div>
-          <div class="option-card" data-value="virtue" onclick="selectSingle(this, 'q3')">
-            <div class="option-label">Без вопросов. Друг в беде не просит</div>
-          </div>
+          <label class="option-card">
+            <input type="radio" name="q3" value="pleasure" hidden>
+            <span class="option-label">Если будет весело — почему бы и нет?</span>
+          </label>
+          <label class="option-card">
+            <input type="radio" name="q3" value="utility" hidden>
+            <span class="option-label">Помогу, но потом попрошу его присмотреть за котом</span>
+          </label>
+          <label class="option-card">
+            <input type="radio" name="q3" value="virtue" hidden>
+            <span class="option-label">Без вопросов. Друг в беде не просит</span>
+          </label>
         </div>
       </div>
       <div class="btn-row">
-        <button class="btn btn-outline" onclick="prevStep()">Назад</button>
-        <button class="btn btn-primary" onclick="nextStep()">Далее</button>
+        <button type="button" class="btn btn-outline" onclick="prevStep()">Назад</button>
+        <button type="button" class="btn btn-primary" onclick="nextStep()">Далее</button>
       </div>
     </div>
 
@@ -490,20 +573,23 @@ body {
       <div class="step-title">Какой подарок выберешь для друга?</div>
       <div class="form-group">
         <div class="options-grid" id="q4">
-          <div class="option-card" data-value="utility" onclick="selectSingle(this, 'q4')">
-            <div class="option-label">Что-то, что ему реально пригодится</div>
-          </div>
-          <div class="option-card" data-value="virtue" onclick="selectSingle(this, 'q4')">
-            <div class="option-label">То, что отражает нашу дружбу. Что-то памятное</div>
-          </div>
-          <div class="option-card" data-value="pleasure" onclick="selectSingle(this, 'q4')">
-            <div class="option-label">Что-то с вау-эффектом</div>
-          </div>
+          <label class="option-card">
+            <input type="radio" name="q4" value="utility" hidden>
+            <span class="option-label">Что-то, что ему реально пригодится</span>
+          </label>
+          <label class="option-card">
+            <input type="radio" name="q4" value="virtue" hidden>
+            <span class="option-label">То, что отражает нашу дружбу. Что-то памятное</span>
+          </label>
+          <label class="option-card">
+            <input type="radio" name="q4" value="pleasure" hidden>
+            <span class="option-label">Что-то с вау-эффектом</span>
+          </label>
         </div>
       </div>
       <div class="btn-row">
-        <button class="btn btn-outline" onclick="prevStep()">Назад</button>
-        <button class="btn btn-primary" onclick="nextStep()">Далее</button>
+        <button type="button" class="btn btn-outline" onclick="prevStep()">Назад</button>
+        <button type="button" class="btn btn-primary" onclick="nextStep()">Далее</button>
       </div>
     </div>
 
@@ -513,20 +599,23 @@ body {
       <div class="step-title">Друг неожиданно отменил встречу. Первая мысль?</div>
       <div class="form-group">
         <div class="options-grid" id="q5">
-          <div class="option-card" data-value="virtue" onclick="selectSingle(this, 'q5')">
-            <div class="option-label">Надеюсь, у него всё в порядке</div>
-          </div>
-          <div class="option-card" data-value="utility" onclick="selectSingle(this, 'q5')">
-            <div class="option-label">Отвратительно — все планы нарушены</div>
-          </div>
-          <div class="option-card" data-value="pleasure" onclick="selectSingle(this, 'q5')">
-            <div class="option-label">Жаль, но в целом есть чем заняться</div>
-          </div>
+          <label class="option-card">
+            <input type="radio" name="q5" value="virtue" hidden>
+            <span class="option-label">Надеюсь, у него всё в порядке</span>
+          </label>
+          <label class="option-card">
+            <input type="radio" name="q5" value="utility" hidden>
+            <span class="option-label">Отвратительно — все планы нарушены</span>
+          </label>
+          <label class="option-card">
+            <input type="radio" name="q5" value="pleasure" hidden>
+            <span class="option-label">Жаль, но в целом есть чем заняться</span>
+          </label>
         </div>
       </div>
       <div class="btn-row">
-        <button class="btn btn-outline" onclick="prevStep()">Назад</button>
-        <button class="btn btn-primary" onclick="submitSurvey()">Узнать результат</button>
+        <button type="button" class="btn btn-outline" onclick="prevStep()">Назад</button>
+        <button type="button" class="btn btn-primary" onclick="submitSurvey()">Узнать результат</button>
       </div>
     </div>
 
@@ -547,7 +636,7 @@ body {
     <div id="resultList"></div>
 
     <div class="btn-row" style="margin-top:32px">
-      <button class="btn btn-outline" onclick="resetSurvey()">Пройти заново</button>
+      <button type="button" class="btn btn-outline" onclick="resetSurvey()">Пройти заново</button>
     </div>
 
   </div>
@@ -574,37 +663,74 @@ const types = {
   }
 };
 
-function selectSingle(el, group) {
-  const container = document.getElementById(group);
-  if (!container) return;
-  container.querySelectorAll('.option-card').forEach(c => c.classList.remove('selected'));
-  el.classList.add('selected');
-  answers[group] = el.dataset.value;
+// Radio change handler
+document.querySelectorAll('.options-grid').forEach(grid => {
+  grid.addEventListener('change', e => {
+    if (e.target.matches('input[type="radio"]')) {
+      grid.querySelectorAll('.option-card').forEach(c => c.classList.remove('selected'));
+      e.target.closest('.option-card').classList.add('selected');
+      answers[grid.id] = e.target.value;
+    }
+  });
+});
+
+function showError(grid) {
+  if (!grid) return;
+  grid.querySelectorAll('.option-card').forEach(c => {
+    c.classList.add('option-card--error');
+    setTimeout(() => c.classList.remove('option-card--error'), 500);
+  });
+}
+
+function isAnswered(stepIdx) {
+  return !!answers[`q${stepIdx + 1}`];
 }
 
 function updateProgress() {
-  const pct = (currentStep / totalSteps) * 100;
+  const pct = ((currentStep + 1) / totalSteps) * 100;
   document.getElementById('progressFill').style.width = pct + '%';
-  document.getElementById('progressText').textContent = `${currentStep}/${totalSteps}`;
+  document.getElementById('progressText').textContent = `${currentStep + 1}/${totalSteps}`;
 }
 
-function showStep(idx) {
-  document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
+function showStep(idx, direction) {
+  document.querySelectorAll('.step').forEach(s => {
+    s.classList.remove('active');
+    s.style.animation = '';
+  });
   const step = document.querySelector(`.step[data-step="${idx}"]`);
-  if (step) step.classList.add('active');
+  if (step) {
+    step.classList.add('active');
+    if (direction === -1) {
+      step.style.animation = 'fadeInDown 0.35s ease';
+    }
+  }
   currentStep = idx;
   updateProgress();
 }
 
 function nextStep() {
+  if (!isAnswered(currentStep)) {
+    const grid = document.querySelector(`#q${currentStep + 1}`);
+    showError(grid);
+    return;
+  }
   if (currentStep < totalSteps - 1) showStep(currentStep + 1);
 }
 
 function prevStep() {
-  if (currentStep > 0) showStep(currentStep - 1);
+  if (currentStep > 0) showStep(currentStep - 1, -1);
 }
 
 function submitSurvey() {
+  for (let i = 0; i < totalSteps; i++) {
+    if (!isAnswered(i)) {
+      showStep(i);
+      const grid = document.querySelector(`#q${i + 1}`);
+      showError(grid);
+      return;
+    }
+  }
+
   const score = { virtue: 0, pleasure: 0, utility: 0 };
   const qLabels = {
     q1: 'Друг изменился',
@@ -618,7 +744,6 @@ function submitSurvey() {
   ['q1','q2','q3','q4','q5'].forEach(q => {
     const val = answers[q];
     if (val && score[val] !== undefined) score[val]++;
-
     const selected = document.querySelector(`#${q} .option-card.selected`);
     qTexts[q] = selected ? selected.querySelector('.option-label').textContent : '—';
   });
@@ -654,18 +779,19 @@ function submitSurvey() {
     list.appendChild(div);
   });
 
-  window.scrollTo({ top: 0, behavior: 'smooth' });
+  document.querySelector('.container').scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
 function resetSurvey() {
   Object.keys(answers).forEach(k => delete answers[k]);
   document.querySelectorAll('.option-card').forEach(c => c.classList.remove('selected'));
+  document.querySelectorAll('.options-grid input[type="radio"]').forEach(r => r.checked = false);
   document.getElementById('stepsContainer').style.display = 'block';
   document.getElementById('resultsContainer').classList.remove('active');
   document.getElementById('statusText').textContent = 'какой ты друг?';
   document.getElementById('stepLabel').textContent = 'тест';
   showStep(0);
-  window.scrollTo({ top: 0, behavior: 'smooth' });
+  document.querySelector('.container').scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
 const sunIcon = '<circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>';
@@ -676,21 +802,42 @@ function toggleTheme() {
   const current = html.getAttribute('data-theme');
   const next = current === 'dark' ? 'light' : 'dark';
   html.setAttribute('data-theme', next);
-  localStorage.setItem('theme', next);
+  try { localStorage.setItem('theme', next); } catch (_) {}
   document.getElementById('themeIcon').innerHTML = next === 'dark' ? moonIcon : sunIcon;
 }
 
-const saved = localStorage.getItem('theme') || 'light';
-document.documentElement.setAttribute('data-theme', saved);
-document.getElementById('themeIcon').innerHTML = saved === 'dark' ? moonIcon : sunIcon;
+function getInitialTheme() {
+  try {
+    const saved = localStorage.getItem('theme');
+    if (saved) return saved;
+  } catch (_) {}
+  try {
+    return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+  } catch (_) {}
+  return 'light';
+}
+
+const initialTheme = getInitialTheme();
+document.documentElement.setAttribute('data-theme', initialTheme);
+document.getElementById('themeIcon').innerHTML = initialTheme === 'dark' ? moonIcon : sunIcon;
+
+document.addEventListener('DOMContentLoaded', () => {
+  updateProgress();
+  window.scrollTo(0, 0);
+});
 
 document.addEventListener('keydown', (e) => {
   if (e.key === 'Enter') {
     const activeStep = document.querySelector('.step.active');
     if (activeStep) {
       const idx = parseInt(activeStep.dataset.step);
-      if (idx < totalSteps - 1) nextStep();
-      else if (idx === totalSteps - 1) submitSurvey();
+      if (idx < totalSteps - 1) {
+        if (isAnswered(idx)) nextStep();
+        else {
+          const grid = document.querySelector(`#q${idx + 1}`);
+          showError(grid);
+        }
+      } else if (idx === totalSteps - 1) submitSurvey();
     }
   }
 });
