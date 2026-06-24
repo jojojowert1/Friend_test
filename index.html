@@ -303,7 +303,6 @@ body {
   border-color: var(--text-muted);
 }
 
-/* Result */
 .results {
   display: none;
 }
@@ -616,7 +615,7 @@ function submitSurvey() {
   };
   const qTexts = {};
 
-  ['q1','q2','q3','q4','q5'].forEach((q, i) => {
+  ['q1','q2','q3','q4','q5'].forEach(q => {
     const val = answers[q];
     if (val && score[val] !== undefined) score[val]++;
 
