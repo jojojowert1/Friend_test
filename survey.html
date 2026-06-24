@@ -1,0 +1,700 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>тип дружбы</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+<style>
+:root {
+  --font-sans: 'Inter', ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 20px;
+  --radius-full: 99px;
+}
+
+[data-theme="light"] {
+  --bg: #f8f3eb;
+  --surface: #ffffff;
+  --text: #2a2420;
+  --text-secondary: #8a7a6e;
+  --text-muted: #baaaa0;
+  --accent: #d48272;
+  --accent-border: #ebc5bd;
+  --accent-bg: #f6e3de;
+  --border: #e0d5ca;
+  --border-focus: #cbb8ab;
+  --green: #7aaa7a;
+}
+
+[data-theme="dark"] {
+  --bg: #1a1614;
+  --surface: #272220;
+  --text: #ede6e0;
+  --text-secondary: #b5a89e;
+  --text-muted: #7a7068;
+  --accent: #dd9485;
+  --accent-border: #5a4440;
+  --accent-bg: #362e2a;
+  --border: #3a3230;
+  --border-focus: #5a4a44;
+  --green: #7aaa7a;
+}
+
+*, *::before, *::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-sans);
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 1.45;
+  letter-spacing: -0.01em;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.3s, color 0.3s;
+  -webkit-font-smoothing: antialiased;
+}
+
+.container {
+  width: 100%;
+  max-width: 600px;
+  padding: 40px 24px;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 44px;
+}
+
+.header-logo {
+  font-weight: 600;
+  font-size: 12px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.header-divider {
+  width: 1px;
+  height: 14px;
+  background: var(--border);
+  transition: background 0.3s;
+}
+
+.header-label {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: -0.01em;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  flex: 1;
+}
+
+.theme-toggle {
+  background: none;
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-full);
+  width: 34px;
+  height: 34px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: var(--text-secondary);
+  transition: border-color 0.2s, color 0.2s;
+}
+
+.theme-toggle:hover {
+  border-color: var(--text-muted);
+}
+
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 24px;
+  font-size: 12px;
+  color: var(--text-secondary);
+  transition: color 0.3s;
+}
+
+.status-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: var(--radius-full);
+  background: var(--accent);
+  flex-shrink: 0;
+  animation: pulse 2.5s ease-in-out infinite;
+  transition: background 0.3s;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
+}
+
+.progress-wrap {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 40px;
+}
+
+.progress-track {
+  flex: 1;
+  height: 2px;
+  background: var(--border);
+  border-radius: 2px;
+  overflow: hidden;
+  transition: background 0.3s;
+}
+
+.progress-fill {
+  height: 100%;
+  background: var(--accent);
+  border-radius: 2px;
+  transition: width 0.5s ease, background 0.3s;
+  width: 0%;
+}
+
+.progress-text {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: -0.01em;
+  color: var(--text-muted);
+  flex-shrink: 0;
+  min-width: 24px;
+  text-align: right;
+}
+
+.steps-container {
+  position: relative;
+}
+
+.step {
+  display: none;
+  animation: fadeIn 0.4s ease;
+}
+
+.step.active {
+  display: block;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.step-number {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: -0.01em;
+  color: var(--text-muted);
+  margin-bottom: 4px;
+}
+
+.step-title {
+  font-weight: 400;
+  font-size: 22px;
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+  color: var(--text);
+  margin-bottom: 6px;
+  transition: color 0.3s;
+}
+
+.step-desc {
+  font-size: 14px;
+  color: var(--text-secondary);
+  margin-bottom: 28px;
+  line-height: 1.5;
+  transition: color 0.3s;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.options-grid {
+  display: grid;
+  gap: 8px;
+}
+
+.option-card {
+  padding: 14px 18px;
+  background: var(--surface);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: border-color 0.2s, background 0.3s;
+  user-select: none;
+}
+
+.option-card:hover {
+  border-color: var(--accent-border);
+}
+
+.option-card.selected {
+  border-color: var(--accent);
+  background: var(--accent-bg);
+}
+
+.option-label {
+  font-size: 15px;
+  color: var(--text);
+  line-height: 1.3;
+  transition: color 0.3s;
+}
+
+.btn-row {
+  display: flex;
+  gap: 10px;
+  margin-top: 32px;
+  justify-content: center;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 11px 22px;
+  border-radius: var(--radius-md);
+  font-weight: 600;
+  font-size: 12px;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: opacity 0.2s, background 0.3s, border 0.3s, color 0.3s;
+  border: none;
+  text-decoration: none;
+  font-family: var(--font-sans);
+}
+
+.btn-primary {
+  background: var(--accent);
+  color: #fff;
+}
+
+.btn-primary:hover {
+  opacity: 0.85;
+}
+
+.btn-outline {
+  background: transparent;
+  border: 1.5px solid var(--border);
+  color: var(--text-secondary);
+}
+
+.btn-outline:hover {
+  border-color: var(--text-muted);
+}
+
+/* Result */
+.results {
+  display: none;
+}
+
+.results.active {
+  display: block;
+  animation: fadeIn 0.5s ease;
+}
+
+.result-card {
+  text-align: center;
+  padding: 40px 24px;
+  background: var(--surface);
+  border: 1.5px solid var(--accent-border);
+  border-radius: var(--radius-lg);
+  margin-bottom: 28px;
+}
+
+.result-card .step-title {
+  font-size: 28px;
+  margin-bottom: 6px;
+}
+
+.result-card .step-desc {
+  max-width: 440px;
+  margin: 0 auto;
+}
+
+.result-card .status-badge {
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.result-divider {
+  width: 100%;
+  height: 1px;
+  background: var(--border);
+  margin: 24px 0;
+  transition: background 0.3s;
+}
+
+.result-item {
+  padding: 18px 20px;
+  background: var(--surface);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-md);
+  margin-bottom: 8px;
+  transition: background 0.3s, border 0.3s;
+}
+
+.result-item:last-child {
+  margin-bottom: 0;
+}
+
+.result-q {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.03em;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  margin-bottom: 4px;
+}
+
+.result-a {
+  font-size: 15px;
+  color: var(--text);
+  line-height: 1.4;
+}
+
+.type-desc {
+  font-size: 15px;
+  color: var(--text-secondary);
+  line-height: 1.5;
+  margin-top: 12px;
+  padding: 0 12px;
+}
+
+.hidden { display: none; }
+</style>
+</head>
+<body>
+
+<div class="container">
+
+  <div class="header">
+    <span class="header-logo">/ friend</span>
+    <span class="header-divider"></span>
+    <span class="header-label" id="stepLabel">тест</span>
+    <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()" title="Переключить тему">
+      <svg id="themeIcon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="5"/>
+        <line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/>
+        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+        <line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/>
+        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+      </svg>
+    </button>
+  </div>
+
+  <div class="status-badge">
+    <span class="status-dot"></span>
+    <span id="statusText">какой ты друг?</span>
+  </div>
+
+  <div class="progress-wrap">
+    <div class="progress-track">
+      <div class="progress-fill" id="progressFill"></div>
+    </div>
+    <span class="progress-text" id="progressText">0/5</span>
+  </div>
+
+  <div class="steps-container" id="stepsContainer">
+
+    <!-- 1 -->
+    <div class="step active" data-step="0">
+      <div class="step-number">01</div>
+      <div class="step-title">Ты чувствуешь, что твой друг изменился. Что будешь делать?</div>
+      <div class="form-group">
+        <div class="options-grid" id="q1">
+          <div class="option-card" data-value="pleasure" onclick="selectSingle(this, 'q1')">
+            <div class="option-label">Посмотрю ещё, но если стало скучно — будем видеться реже</div>
+          </div>
+          <div class="option-card" data-value="utility" onclick="selectSingle(this, 'q1')">
+            <div class="option-label">Главное, чтобы это не повлияло на наши общие дела</div>
+          </div>
+          <div class="option-card" data-value="virtue" onclick="selectSingle(this, 'q1')">
+            <div class="option-label">Узнаю, чем он теперь интересуется и почему изменился</div>
+          </div>
+        </div>
+      </div>
+      <div class="btn-row">
+        <button class="btn btn-primary" onclick="nextStep()">Далее</button>
+      </div>
+    </div>
+
+    <!-- 2 -->
+    <div class="step" data-step="1">
+      <div class="step-number">02</div>
+      <div class="step-title">Твой друг сказал, что ему тяжело. Что предложишь?</div>
+      <div class="form-group">
+        <div class="options-grid" id="q2">
+          <div class="option-card" data-value="utility" onclick="selectSingle(this, 'q2')">
+            <div class="option-label">Давай посмотрим, как я могу тебе помочь</div>
+          </div>
+          <div class="option-card" data-value="pleasure" onclick="selectSingle(this, 'q2')">
+            <div class="option-label">Тебе надо развлечься. Давай сходим куда-нибудь?</div>
+          </div>
+          <div class="option-card" data-value="virtue" onclick="selectSingle(this, 'q2')">
+            <div class="option-label">Расскажи, что случилось. Вместе придумаем, как это исправить</div>
+          </div>
+        </div>
+      </div>
+      <div class="btn-row">
+        <button class="btn btn-outline" onclick="prevStep()">Назад</button>
+        <button class="btn btn-primary" onclick="nextStep()">Далее</button>
+      </div>
+    </div>
+
+    <!-- 3 -->
+    <div class="step" data-step="2">
+      <div class="step-number">03</div>
+      <div class="step-title">Друг попросил помочь с переездом. Твоя реакция?</div>
+      <div class="form-group">
+        <div class="options-grid" id="q3">
+          <div class="option-card" data-value="pleasure" onclick="selectSingle(this, 'q3')">
+            <div class="option-label">Если будет весело — почему бы и нет?</div>
+          </div>
+          <div class="option-card" data-value="utility" onclick="selectSingle(this, 'q3')">
+            <div class="option-label">Помогу, но потом попрошу его присмотреть за котом</div>
+          </div>
+          <div class="option-card" data-value="virtue" onclick="selectSingle(this, 'q3')">
+            <div class="option-label">Без вопросов. Друг в беде не просит</div>
+          </div>
+        </div>
+      </div>
+      <div class="btn-row">
+        <button class="btn btn-outline" onclick="prevStep()">Назад</button>
+        <button class="btn btn-primary" onclick="nextStep()">Далее</button>
+      </div>
+    </div>
+
+    <!-- 4 -->
+    <div class="step" data-step="3">
+      <div class="step-number">04</div>
+      <div class="step-title">Какой подарок выберешь для друга?</div>
+      <div class="form-group">
+        <div class="options-grid" id="q4">
+          <div class="option-card" data-value="utility" onclick="selectSingle(this, 'q4')">
+            <div class="option-label">Что-то, что ему реально пригодится</div>
+          </div>
+          <div class="option-card" data-value="virtue" onclick="selectSingle(this, 'q4')">
+            <div class="option-label">То, что отражает нашу дружбу. Что-то памятное</div>
+          </div>
+          <div class="option-card" data-value="pleasure" onclick="selectSingle(this, 'q4')">
+            <div class="option-label">Что-то с вау-эффектом</div>
+          </div>
+        </div>
+      </div>
+      <div class="btn-row">
+        <button class="btn btn-outline" onclick="prevStep()">Назад</button>
+        <button class="btn btn-primary" onclick="nextStep()">Далее</button>
+      </div>
+    </div>
+
+    <!-- 5 -->
+    <div class="step" data-step="4">
+      <div class="step-number">05</div>
+      <div class="step-title">Друг неожиданно отменил встречу. Первая мысль?</div>
+      <div class="form-group">
+        <div class="options-grid" id="q5">
+          <div class="option-card" data-value="virtue" onclick="selectSingle(this, 'q5')">
+            <div class="option-label">Надеюсь, у него всё в порядке</div>
+          </div>
+          <div class="option-card" data-value="utility" onclick="selectSingle(this, 'q5')">
+            <div class="option-label">Отвратительно — все планы нарушены</div>
+          </div>
+          <div class="option-card" data-value="pleasure" onclick="selectSingle(this, 'q5')">
+            <div class="option-label">Жаль, но в целом есть чем заняться</div>
+          </div>
+        </div>
+      </div>
+      <div class="btn-row">
+        <button class="btn btn-outline" onclick="prevStep()">Назад</button>
+        <button class="btn btn-primary" onclick="submitSurvey()">Узнать результат</button>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="results" id="resultsContainer">
+
+    <div class="result-card" id="resultCard">
+      <div class="status-badge">
+        <span class="status-dot" style="background:var(--green);animation:none"></span>
+        <span id="statusResult" style="color:var(--green);font-weight:600">ТВОЙ ТИП ДРУЖБЫ</span>
+      </div>
+      <div class="step-title" id="resultTitle"></div>
+      <div class="type-desc" id="resultDesc"></div>
+    </div>
+
+    <div class="result-divider"></div>
+    <div id="resultList"></div>
+
+    <div class="btn-row" style="margin-top:32px">
+      <button class="btn btn-outline" onclick="resetSurvey()">Пройти заново</button>
+    </div>
+
+  </div>
+
+</div>
+
+<script>
+const totalSteps = 5;
+let currentStep = 0;
+const answers = {};
+
+const types = {
+  virtue: {
+    title: 'Дружба-добродетель',
+    desc: 'Твой тип — глубокая связь. Ты ценишь человека таким, какой он есть, без условий и игр. Для тебя друг — не функция и не развлечение, а отдельная вселенная, которую хочется изучать. Ты умеешь слушать, сопереживать и быть рядом, даже когда это неудобно. Аристотель называл это высшей формой дружбы — когда двое ценят друг друга за самобытность, а не за пользу или эмоции. Такая дружба — редкость, и ты это знаешь.'
+  },
+  pleasure: {
+    title: 'Дружба-удовольствие',
+    desc: 'Для тебя друг — это человек, с которым весело и легко. Ты ценишь спонтанность, совместные приключения, шутки до утра и бесконечные переписки. В дружбе тебе важно чувствовать отдачу энергии и кайф от общения. Если искра пропадает — ты не тянешь мертвые отношения. Аристотель называл такой тип дружбы «ради удовольствия»: она яркая, но держится на эмоциях. Выбирай тех, с кем по пути не только по кайфу, но и по духу.'
+  },
+  utility: {
+    title: 'Дружба-польза',
+    desc: 'Ты ищешь в дружбе опору и взаимовыручку. Для тебя важно, чтобы рядом был надёжный человек, с которым можно решать общие задачи, делить быт, работу, проблемы. Ты не ждёшь от друзей ежедневных признаний в любви, но если нужно — подставишь плечо. Аристотель называл такой тип «дружбой ради пользы»: вы держитесь друг за друга, потому что вместе вы сильнее. Главное — не скатиться в чистый расчёт и не забывать, что другой — не только функция.'
+  }
+};
+
+function selectSingle(el, group) {
+  const container = document.getElementById(group);
+  if (!container) return;
+  container.querySelectorAll('.option-card').forEach(c => c.classList.remove('selected'));
+  el.classList.add('selected');
+  answers[group] = el.dataset.value;
+}
+
+function updateProgress() {
+  const pct = (currentStep / totalSteps) * 100;
+  document.getElementById('progressFill').style.width = pct + '%';
+  document.getElementById('progressText').textContent = `${currentStep}/${totalSteps}`;
+}
+
+function showStep(idx) {
+  document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
+  const step = document.querySelector(`.step[data-step="${idx}"]`);
+  if (step) step.classList.add('active');
+  currentStep = idx;
+  updateProgress();
+}
+
+function nextStep() {
+  if (currentStep < totalSteps - 1) showStep(currentStep + 1);
+}
+
+function prevStep() {
+  if (currentStep > 0) showStep(currentStep - 1);
+}
+
+function submitSurvey() {
+  const score = { virtue: 0, pleasure: 0, utility: 0 };
+  const qLabels = {
+    q1: 'Друг изменился',
+    q2: 'Другу тяжело',
+    q3: 'Помощь с переездом',
+    q4: 'Подарок для друга',
+    q5: 'Отмена встречи'
+  };
+  const qTexts = {};
+
+  ['q1','q2','q3','q4','q5'].forEach((q, i) => {
+    const val = answers[q];
+    if (val && score[val] !== undefined) score[val]++;
+
+    const selected = document.querySelector(`#${q} .option-card.selected`);
+    qTexts[q] = selected ? selected.querySelector('.option-label').textContent : '—';
+  });
+
+  let maxType = 'virtue';
+  let maxCount = 0;
+  Object.keys(score).forEach(t => {
+    if (score[t] > maxCount) {
+      maxCount = score[t];
+      maxType = t;
+    }
+  });
+
+  const result = types[maxType];
+
+  document.getElementById('stepsContainer').style.display = 'none';
+  document.getElementById('resultsContainer').classList.add('active');
+  document.getElementById('progressFill').style.width = '100%';
+  document.getElementById('progressText').textContent = '5/5';
+  document.getElementById('statusText').textContent = 'готово';
+  document.getElementById('stepLabel').textContent = 'результат';
+
+  document.getElementById('resultTitle').textContent = result.title;
+  document.getElementById('resultDesc').textContent = result.desc;
+
+  const list = document.getElementById('resultList');
+  list.innerHTML = '';
+  ['q1','q2','q3','q4','q5'].forEach(q => {
+    const div = document.createElement('div');
+    div.className = 'result-item';
+    const text = qTexts[q];
+    div.innerHTML = `<div class="result-q">${qLabels[q]}</div><div class="result-a">${text}</div>`;
+    list.appendChild(div);
+  });
+
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function resetSurvey() {
+  Object.keys(answers).forEach(k => delete answers[k]);
+  document.querySelectorAll('.option-card').forEach(c => c.classList.remove('selected'));
+  document.getElementById('stepsContainer').style.display = 'block';
+  document.getElementById('resultsContainer').classList.remove('active');
+  document.getElementById('statusText').textContent = 'какой ты друг?';
+  document.getElementById('stepLabel').textContent = 'тест';
+  showStep(0);
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+const sunIcon = '<circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>';
+const moonIcon = '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>';
+
+function toggleTheme() {
+  const html = document.documentElement;
+  const current = html.getAttribute('data-theme');
+  const next = current === 'dark' ? 'light' : 'dark';
+  html.setAttribute('data-theme', next);
+  localStorage.setItem('theme', next);
+  document.getElementById('themeIcon').innerHTML = next === 'dark' ? moonIcon : sunIcon;
+}
+
+const saved = localStorage.getItem('theme') || 'light';
+document.documentElement.setAttribute('data-theme', saved);
+document.getElementById('themeIcon').innerHTML = saved === 'dark' ? moonIcon : sunIcon;
+
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Enter') {
+    const activeStep = document.querySelector('.step.active');
+    if (activeStep) {
+      const idx = parseInt(activeStep.dataset.step);
+      if (idx < totalSteps - 1) nextStep();
+      else if (idx === totalSteps - 1) submitSurvey();
+    }
+  }
+});
+</script>
+</body>
+</html>
